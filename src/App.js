@@ -5,15 +5,17 @@ function App() {
   const [choices, setChoices] = useState('');
   const [category, setCategory] = useState('Choose a category');
   const [categoryWithChoices, setCategoryWithChoices] = useState({});
+  const [categoryChoices, setCategoryChoices] = useState(['Spouse/Partner', 'Career', 'Salary', 'Pet', 'Car']);
+  const [number, setNumber] = useState(2);
 
   const handleCategoryChange = ({ target }) => {
     setCategory(target.value);
   };
-  const categoryChoices = ['Spouse/Partner', 'Career', 'Salary', 'Pet', 'Car'];
   
   const handleClick = () => {
-    const formattedChoices = choices.split(',');
+    const formattedChoices = choices.split(',').filter(c => c.length > 0);
     setCategoryWithChoices({...categoryWithChoices, [`${category}`]: formattedChoices })
+    setCategoryChoices(categoryChoices.filter(cat => cat !== category))
     setChoices('')
     setCategory('Choose a category')
   }
@@ -23,7 +25,7 @@ function App() {
       {Object.keys(categoryWithChoices).map((cat, idx) => (
         <>
           <p key={idx}>{cat}</p>
-          <ul>
+          <ul key={idx}>
             {categoryWithChoices[cat].map((choice, idx) => (
               <li key={idx}>{choice}</li>
             ))}
@@ -55,6 +57,9 @@ function App() {
         }
         {categoryWithChoices.length > 2 && <button>Ready to Play</button>}
       </header>
+      <p>Pick a number:</p>
+      <input type="number" value={number} onChange={(({target}) => setNumber(target.value))}/>
+      <button>Start Game</button>
     </div>
   );
 }
